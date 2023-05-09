@@ -1,0 +1,118 @@
+{% extends 'base.html' %}
+{% block body %}
+
+			<div class="body__panel">
+				<div class="container">
+					<div class="heading_wrap">
+						<h2>Blog Management</h2>
+					</div>
+
+					<div class="panel margin30">
+						<div class="tabprt">
+							<div class="block__mb_short">
+								<div class="resHeading">
+									<h3>Blog Management</h3>
+									<a class="mob_sidetogglebtn">
+										<img src="/static/images/icon/toogle.png" alt="">
+									</a>
+								</div>
+							</div>
+							
+							<div class="personelBodyprt">
+								<form action="/add/blog/" method="POST">
+								<div class="topdeliveryprt">
+									<span>
+										<h3>Add Blog</h3>
+										<!-- <p>
+											Invite agents to come register and start earning.
+										</p> -->
+									</span>
+									<!-- <button class="btn bluebtn" onclick="window.location.href = 'faq-terms.html';">
+										FAQS and Terms & Conditions
+										<i class="fa fa-angle-right"></i>
+									</button> -->
+
+								</div>
+
+								<div class="row formprt delivery-agent margin30">
+									<div class="form_field">
+										<label>Title</label>
+										<input name='title' class="form-control" type="text" required>
+									</div>
+								
+								</div>
+								<div class="row formprt delivery-agent margin30">
+									<div class="form_field">
+										<label>Deacription</label>
+										<textarea name='desc' class="form-control" type="text" required></textarea>
+									</div>
+
+								</div>
+							</br>
+								<div class="form_field">
+									<label>&nbsp;</label>
+										<button class="btn orenge__btn" type="submit">
+											ADD
+										</button>
+										
+								</div>
+							</form>
+
+								
+							</div>
+
+
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	{% endblock body %}
+
+
+	JS Plugins
+	<script src="js/jquery.min.js" type="text/javascript"></script>
+
+	<script src="js/jquery.mCustomScrollbar.concat.min.js"></script>
+
+	<script src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
+	<script>
+		$('#example').DataTable({});
+		$('#example-1').DataTable({});
+		$('#example-2').DataTable({});
+		$('#example-3').DataTable({});
+	</script>
+
+	<!-- custom js -->
+	<script src="js/main.js" type="text/javascript"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+
+</html>

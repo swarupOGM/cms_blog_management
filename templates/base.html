@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta content="IE=edge" http-equiv="X-UA-Compatible">
+	<meta content="width=device-width, initial-scale=1" name="viewport">
+	<title>Snappie</title>
+	<link rel="shortcut icon" type="image/x-icon" href="/static/images/favicon.png">
+
+
+
+	<!-- font css -->
+	<link rel="stylesheet" href="/static/css/font-awesome.min.css">
+	<link rel="stylesheet" href="https://cdn.datatables.net/1.10.24/css/jquery.dataTables.min.css">
+
+	<!-- custom css -->
+
+
+	<link rel="stylesheet" href="/static/css/style.css">
+	<!-- Custom Scrollbar Css -->
+	<link type="text/css" href="/static/css/jquery.mCustomScrollbar.css" rel="stylesheet">
+
+
+
+	<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+	<!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+
+</head>
+
+
+<body>
+
+
+	<div class="wrapper show">
+		<div class="body-content">
+			<header>
+				<div class="container">
+					<div class="inner_header">
+						<div class="logopanel">
+							<a class="sidetogglebtn">
+								<img src="/static/images/icon/toogle.png" alt="" class="block__mb">
+							</a>
+							<!-- <a href="dashboard.html" class="logoprt">
+								<img src="/static/images/logo.png" alt="">
+							</a> -->
+						</div>
+						<div class="nav">
+							<div class="top_userpanel block__mb">
+								<div class="flex">
+									<a href="profile.html">
+										<img src="/static/images/profile_img.png" alt="">
+									</a>
+									<div class="userdetail">
+										<h3>Masood aremu</h3>
+										<small>massod@gmail.com</small>
+										<button onclick="window.location.href = '/edit/profile/';">Edit
+											Profile</button>
+									</div>
+								</div>
+								<button type="button" class="closebtn sidemenuclose">
+									<img src="/static/images/icon/cross.png" alt="">
+								</button>
+							</div>
+							<ul>
+								<li>
+									<a href="/blog/list/">
+										<i class="fa fa-home"></i>
+										My Blogs
+									</a>
+								</li>
+						
+								<li>
+									<a href="/add/blog/">
+										<img src="/static/images/icon/edit.png" alt="">
+										Blog Managemt
+									</a>
+								</li>
+								<li class="block__mb">
+									<a href="settings.html">
+										<img src="/static/images/icon/settings.png" alt="">
+										Settings
+									</a>
+								</li>
+
+
+								<li class="block__mb">
+									<a href="logout/">
+										<img src="/static/images/icon/logout.png" alt="">
+										Log out
+									</a>
+								</li>
+							</ul>
+						</div>
+
+						<div class="rightnotificationprt">
+							<div class="bell">
+								
+								<div class="notification_drop">
+
+									<h2>
+										Notification
+										<span>40</span>
+									</h2>
+									<ul class="mCustomScrollbar">
+										<li>
+											<img src="/static/images/profile_img.png" alt="">
+											<div class="rightnoteinfo">
+												<h3>#1872 has completed delivery</h3>
+												<div class="flex justify-spacebetwwen">
+													<p>
+														Express delivery
+													</p>
+													<small>23 feb, 2021</small>
+												</div>
+
+											</div>
+										</li>
+										<li>
+											<img src="/static/images/profile_img.png" alt="">
+											<div class="rightnoteinfo">
+												<h3>#1872 has completed delivery</h3>
+												<div class="flex justify-spacebetwwen">
+													<p>
+														Express delivery
+													</p>
+													<small>23 feb, 2021</small>
+												</div>
+
+											</div>
+										</li>
+										<li>
+											<img src="/static/images/profile_img.png" alt="">
+											<div class="rightnoteinfo">
+												<h3>#1872 has completed delivery</h3>
+												<div class="flex justify-spacebetwwen">
+													<p>
+														Express delivery
+													</p>
+													<small>23 feb, 2021</small>
+												</div>
+
+											</div>
+										</li>
+										<li>
+											<img src="/static/images/profile_img.png" alt="">
+											<div class="rightnoteinfo">
+												<h3>#1872 has completed delivery</h3>
+												<div class="flex justify-spacebetwwen">
+													<p>
+														Express delivery
+													</p>
+													<small>23 feb, 2021</small>
+												</div>
+
+											</div>
+										</li>
+										<li>
+											<img src="/static/images/profile_img.png" alt="">
+											<div class="rightnoteinfo">
+												<h3>#1872 has completed delivery</h3>
+												<div class="flex justify-spacebetwwen">
+													<p>
+														Express delivery
+													</p>
+													<small>23 feb, 2021</small>
+												</div>
+
+											</div>
+										</li>
+									</ul>
+								</div>
+							</div>
+							<div class="profile__dropdown hidden__mb">
+								<a href="#">
+									<img src="/static/images/no-userimg.png" alt="">
+									{{all_eemployee.username}}
+								</a>
+								<div class="dropdown-submenu listingMenu">
+									<ul>
+										<li>
+
+											<div class="padtop flex">
+												<a href="profile.html">
+													<img src="/static/images/no-userimg.png" alt="">
+												</a>
+												<div class="userdetail">
+													<h3>{{all_eemployee.username}}</h3>
+													<small>{{all_eemployee.email}}</small>
+													<button onclick="window.location.href = '/edit/profile/';">Edit
+														Profile</button>
+												</div>
+											</div>
+										</li>
+										<li>
+											<a href="/password/reset" type="button">
+												<img src="/static/images/icon/settings.png" alt="">
+												Reset Password
+											</a>
+										</li>
+
+
+										<li>
+											<a href="/logout/">
+												<img src="/static/images/icon/logout.png" alt="">
+												Log out
+											</a>
+										</li>
+
+									</ul>
+								</div>
+							</div>
+						</div>
+
+						<div class="overlaywrap"></div>
+					</div>
+				</div>
+
+			</header>
+
+            {% block body %}
+    
+            {% endblock body %}
+
+            <!-- JS Plugins -->
+	<script src="/static/js/jquery.min.js" type="text/javascript"></script>
+
+	<script src="/static/js/jquery.mCustomScrollbar.concat.min.js"></script>
+
+	<script src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
+	<script>
+		$('#example').DataTable({});
+	</script>
+
+	<!-- custom js -->
+	<script src="/static/js/main.js" type="text/javascript"></script>
+
+</body>
+
+</html>
+

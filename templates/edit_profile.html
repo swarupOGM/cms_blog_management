@@ -1,0 +1,81 @@
+{% extends 'base.html' %}
+{% block body %}
+
+			<div class="body__panel">
+				<div class="container">
+					<div class="heading_wrap">
+						<h2>
+							<a href="dashboard.html">
+								<i class="fa fa-angle-left"></i>
+							</a>
+
+							My Profile
+						</h2>
+					</div>
+					<div class="panel margin30">
+						<div class="editbox">
+							<h3>Edit Profile</h3>
+							<dif>
+                                <!-- <img src="/static/images/icon/cross.png" alt=""> -->
+                                {% if message %}
+                                        <h2 align="center" style="color:green;"><b>{{message}}</b></h1>
+        
+                                {% endif %}
+                            </dif>
+							<form action="/edit/profile/" method="POST">
+        
+							{% if all_eemployee %}
+							<div class="box_mid">
+								<div class="row">
+									<div class="form_field">
+										<label>First Name</label>
+										<input name ='first_name' value={{all_eemployee.first_name}} class="form-control" type="text" required>
+									</div>
+									<div class="form_field">
+										<label>Last Name</label>
+										<input name='last_name' value={{all_eemployee.last_name}} class="form-control" type="text" required>
+									</div>
+									<div class="form_field full-width">
+										<label>Email Address</label>
+										<input name='email' value={{all_eemployee.email}} class="form-control" type="text" required>
+									</div>
+									<div class="form_field full-width">
+										<label>UserName</label>
+										<input name='username' value={{all_eemployee.username}} class="form-control" type="text" required>
+									</div>
+									<div class="form_field full-width">
+										<label>Contact No</label>
+										<input name='phone' value={{all_eemployee.contact_no}} class="form-control" type="text" required>
+									</div>
+									<div class="form_field full-width">
+										<label>Profile Image</label>
+										<input name='profile_photo' class="form-control" type="file" required>
+									</div>
+									
+								</div>
+								{% endif %}
+							</form>
+
+
+								<button type="submit" class="orenge__btn full-width margin20">Save Changes</button>
+							</div>
+						</div>
+
+					</div>
+
+
+
+
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+
+
+
+
+
+	{% endblock body %}
+

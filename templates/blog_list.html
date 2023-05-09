@@ -1,0 +1,103 @@
+{% extends 'base.html' %}
+{% block body %}
+<dif>
+    <!-- <img src="/static/images/icon/cross.png" alt=""> -->
+    {% if message %}
+            <h2 align="center" style="color:red;"><b>{{message}}</b></h1>
+
+    {% endif %}
+</dif>
+<div class="body__panel">
+    <div class="container">
+        <div class="heading_wrap">
+            <h2>Blogs</h2>
+
+
+
+            <!-- <div class="searchprt">
+                <input type="text" placeholder="Search..." />
+            </div> -->
+
+
+            <div >
+                <!-- <select>
+                    <option>10/02/2021 - 10/03/2021</option>
+                    <option>10/02/2021 - 10/03/2021</option>
+                    <option>10/02/2021 - 10/03/2021</option>
+                </select> -->
+            </div>
+
+
+        </div>
+
+
+
+
+
+        
+
+
+        <div class="booking_listpart margin30">
+            {% for blog in blogs %}
+            <div class="listdetailList">
+
+                <div class="acodian_sec set">
+                    <a href="javascript:void(0)">
+                        <div class="__delivery">
+                            <div>
+                                <span class="blu">{{blog.blog_title}}</span>
+                                
+                                <span class="d-block">
+                                    <small>{{blog.blog_description}}
+                                </span>
+                                <span class="blu">
+                                    <small>Created_at: {{blog.date_created}}</small>
+                                </span>
+                            </div>
+
+                            <!-- <button class="btn progressbut">Active</button> -->
+                            <form action="/delete/blog/{{blog.id}}" method="GET">
+                            <button class="btn redbtn">Delete</button>
+                            </form>
+                            <br>
+                            <form action="/edit/blog/{{blog.id}}" method="GET">
+                            <button class="btn bluebtn">Edit</button>
+                        </form>
+
+                        </div>
+                        
+                    </a>
+                    
+                    </div>
+            </div>
+            {% endfor %}
+            </div>
+
+        </div>
+
+
+    </div>
+</div>
+</div>
+</div>
+
+
+<!-- JS Plugins -->
+<script src="/static/js/jquery.min.js" type="text/javascript"></script>
+
+<script src="/static/js/jquery.mCustomScrollbar.concat.min.js"></script>
+
+<!-- custom js -->
+<script src="/static/js/main.js" type="text/javascript"></script>
+
+
+
+
+
+
+
+
+
+
+
+	{% endblock body %}
