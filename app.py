@@ -6,16 +6,20 @@ from flask_migrate import Migrate, history
 import requests
 from os import environ
 import uuid
+from base64 import b64encode
+from werkzeug.utils import secure_filename
 
 app = Flask(__name__)
 print()
 # app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://{}:{}@localhost/{}'.format(environ['DB_USER'],environ['DB_PASS'], environ['DB_DATABASE'])
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://{}:{}@localhost/{}'.format('aggdirect1','IamSwarup1', 'cms_system')
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://{}:{}@localhost/{}'.format('aggdirect1','IamSwarup1', 'growealth')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 app.secret_key = 'somesecretkeythatonlyishouldknow'
 migrate=Migrate(app,db) #Initializing migrate.
 
+UPLOAD_FOLDER = 'static/uploads'
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 
 def generate_uuid():
@@ -28,11 +32,23 @@ class Blog(db.Model):
     blog_description = db.Column(db.String(500), nullable=False)
     created_by = db.Column(db.String(100), db.ForeignKey('user.id'), nullable=False)
     date_created = db.Column(db.DateTime, default=datetime.utcnow)
-    data = db.Column(db.LargeBinary)
+    is_active = db.Column(db.Boolean, default=True)
+    image_name = db.Column(db.String(200), unique=True, nullable=True)
+    image = db.Column(db.LargeBinary(length=16777216))
 
     def __repr__(self) -> str:
         return f"{self.id} - {self.role_title}"
 
+#blog comment
+class Comment(db.Model):
+    id = db.Column(db.String(100), primary_key=True, default=generate_uuid)
+    comment_txt = db.Column(db.String(1000), nullable=False)
+    blog_id = db.Column(db.String(100), db.ForeignKey('blog.id'), nullable=False)
+    created_by = db.Column(db.String(100), db.ForeignKey('user.id'), nullable=False)
+    date_created = db.Column(db.DateTime, default=datetime.utcnow)
+
+    def __repr__(self) -> str:
+        return f"{self.blog_id} - {self.comment_txt}"
 #declaring the user model
 class User(db.Model):
     id = db.Column(db.String(100), primary_key=True, default=generate_uuid)
@@ -44,7 +60,8 @@ class User(db.Model):
     contact_no = db.Column(db.String(15), unique=True, nullable=True)
     is_admin = db.Column(db.Boolean, default=False)
     date_created = db.Column(db.DateTime, default=datetime.utcnow)
-    profile_image = db.Column(db.LargeBinary)
+    profile_image_name = db.Column(db.String(255), nullable=True)
+    profile_image = db.Column(db.LargeBinary(length=16777216))
 
 
     def __repr__(self) -> str:
@@ -54,6 +71,11 @@ class User(db.Model):
         return self.first_name + ' ' + self.last_name 
 
 
+
+@app.route('/growealth', methods=['GET'])
+def index_page():
+    blog = Blog.query.all()
+    return render_template('index.html', blogs=blog)
 
 #reset password
 @app.route('/password/reset',methods=['GET','POST'])
@@ -77,7 +99,7 @@ def reset_password():
         message = "Last Password is not correct!"
     
     if 'user_id' in session:
-        return render_template('reset_password.html', all_eemployee=admin_user, message=message)
+        return render_template('reset_password.html', all_employee=admin_user, message=message)
     else:
         return redirect(url_for('login'))
 
@@ -93,6 +115,10 @@ def deleteblog(id):
             blog_obj = Blog.query.filter_by(id=id).one()
             db.session.delete(blog_obj)
             db.session.commit()
+            blog = Blog.query.all()           
+            admin_user = User.query.first()
+            message = "Deleted Successfully!"
+            return render_template('blog_list.html', all_employee=admin_user, blogs=blog, message=message)
     if 'user_id' in session:
         return redirect(url_for("blog_list"))
     else:
@@ -112,10 +138,10 @@ def edit_blog(id):
         blog = Blog.query.all()           
         admin_user = User.query.first()
         message = "Updated Successfully!"
-        return render_template('blog_list.html', all_eemployee=admin_user, blogs=blog, message=message)
+        return render_template('blog_list.html', all_employee=admin_user, blogs=blog, message=message)
     admin_user = User.query.first() 
     if 'user_id' in session:
-        return render_template('blog_edit.html', all_eemployee=admin_user, blog=blog_obj )
+        return render_template('blog_edit.html', all_employee=admin_user, blog=blog_obj )
     else:
         return redirect(url_for('login'))
 
@@ -124,15 +150,17 @@ def add_blog():
     if request.method=='POST':
         title = request.form.get('title')
         desc = request.form.get('desc')
-        print(title, desc)
-        blog = Blog(blog_title=title, blog_description=desc, created_by=session['user_id'], date_created=datetime.now())        
+        image = request.files.get('image')
+        print(title, desc, bytearray(image))
+        files = request.file.getlist('files[]')
+        blog = Blog(blog_title=title, blog_description=desc, created_by=session['user_id'], date_created=datetime.now(), data=image)        
         db.session.add(blog)
         db.session.commit()   
     admin_user = User.query.first() 
     # all_role = role.query.all()
     # print(all_role)
     if 'user_id' in session:
-        return render_template('personnel.html', all_eemployee=admin_user )
+        return render_template('personnel.html', all_employee=admin_user )
     else:
         return render_template('employee_login.html')
 
@@ -145,13 +173,13 @@ def blog_list():
     # all_role = role.query.all()
     # print(all_role)
     if 'user_id' in session:
-        return render_template('blog_list.html', all_eemployee=admin_user, blogs=blog )
+        return render_template('blog_list.html', all_employee=admin_user, blogs=blog )
     else:
         return render_template('employee_login.html')
 
 
 ############################################## ADD EMPLOYEE VIEW ##################################################################
-##register employee
+##edit admin profile
 @app.route('/edit/profile/', methods=['GET', 'POST'])
 def register_employee():
     admin_user = User.query.first()
@@ -162,19 +190,24 @@ def register_employee():
         user.first_name = request.form.get('first_name')
         user.last_name = request.form.get('last_name')
         user.contact_no = request.form.get('phone')
-        # photo = request.form.get('profile_photo')
-        # user.profile_image = request.form.get('profile_photo')
+        profile_image = request.files.get('profile_photo')
+        print(request.files.get('profile_photo'))
+        user.profile_image = profile_image.read()
+        user.profile_image_name = profile_image.filename
+        #image save
+        import os
+        path = os.path.join(app.config['UPLOAD_FOLDER'], secure_filename(profile_image.filename))
+        profile_image.save(path)
         # user.profile_image = photo
-        
         db.session.add(user)
         db.session.commit()
         message = "Profile Updated Successfully!"
-        return render_template('edit_profile.html', all_eemployee=admin_user, message=message )   
+        return render_template('edit_profile.html', all_employee=admin_user, message=message)   
      
     # all_role = role.query.all()
     # print(all_role)
     if 'user_id' in session:
-        return render_template('edit_profile.html', all_eemployee=admin_user )
+        return render_template('edit_profile.html', all_employee=admin_user )
     else:
         return render_template('employee_login.html')
 
