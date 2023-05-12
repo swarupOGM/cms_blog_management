@@ -9,7 +9,9 @@
                 <!-- <img src="/static/images/icon/cross.png" alt=""> -->
                 {% if message %}
                         <h2 align="center" style="color:red;"><b>{{message}}</b></h1>
-            
+                {% endif %}
+                {% if success_message %}
+                        <h2 align="center" style="color:green;"><b>{{success_message}}</b></h1>
                 {% endif %}
             </dif>
 
@@ -49,20 +51,47 @@
                                 <span class="blu">{{blog.blog_title}}</span>
                                 
                                 <span class="d-block">
-                                    <small>{{blog.blog_description}}
+                                    <small>{{blog.blog_description}}</small>
+                                </span>
+                                <span class="d-block">
+                                    <small><img src="/static/uploads/{{ blog.image_name}}" alt="" class="img-fluid"></small>
                                 </span>
                                 <span class="blu">
                                     <small>Created_at: {{blog.date_created}}</small>
                                 </span>
+                                <br>
+                                
+                                    {% if blog.is_active %}
+                                        <span class="green">
+                                            <small>Status: Active</small>
+                                        </span>
+                                    {% else %}
+                                        <span class="green">
+                                            <small>Status: Inactive</small>
+                                        </span>
+                                    {% endif %}
+                                
+                                
                             </div>
 
                             <!-- <button class="btn progressbut">Active</button> -->
                             <form action="/delete/blog/{{blog.id}}" method="GET">
-                            <button class="btn redbtn">Delete</button>
+                                <button class="btn redbtn">Delete</button>
                             </form>
                             <br>
                             <form action="/edit/blog/{{blog.id}}" method="GET">
-                            <button class="btn bluebtn">Edit</button>
+                                <button class="btn bluebtn">Edit</button>
+                            </form>
+                            <br>
+                            {% if blog.is_active %}
+                                <form action="/deactivate/blog/{{blog.id}}" method="GET">
+                                    <button class="btn btndeactive">Deactivate</button>
+                                </form>
+                            {% else %}
+                                <form action="/activate/blog/{{blog.id}}" method="GET">
+                                    <button class="btn btnactive">Activate</button>
+                                </form>
+                            {% endif %}
                         </form>
 
                         </div>

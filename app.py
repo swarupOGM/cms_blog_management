@@ -74,8 +74,55 @@ class User(db.Model):
 
 @app.route('/growealth', methods=['GET'])
 def index_page():
+    admin_user = User.query.first()
+    created_by=admin_user.full_name()
     blog = Blog.query.all()
-    return render_template('index.html', blogs=blog)
+    return render_template('index.html', blogs=blog, created_by=created_by)
+
+
+##Activate blog
+@app.route('/activate/blog/<id>',methods=['GET'])
+def activate_blog(id):
+    print("in deactivated")
+    if request.method == 'GET':
+        if Blog.query.filter_by(id=id).first() is not None:
+            a = request.args.to_dict()
+            print(a)
+            print("in")
+            blog_obj = Blog.query.filter_by(id=id).one()
+            blog_obj.is_active = True
+            db.session.add(blog_obj)
+            db.session.commit()
+            blog = Blog.query.all()           
+            admin_user = User.query.first()
+            message = "Blog Activated Successfully!"
+            return render_template('blog_list.html', all_employee=admin_user, blogs=blog, success_message=message)
+    if 'user_id' in session:
+        return redirect(url_for("blog_list"))
+    else:
+        return redirect(url_for('login'))
+
+##deactivate blog
+@app.route('/deactivate/blog/<id>',methods=['GET'])
+def deactivate_blog(id):
+    print("in deactivated")
+    if request.method == 'GET':
+        if Blog.query.filter_by(id=id).first() is not None:
+            a = request.args.to_dict()
+            print(a)
+            print("in")
+            blog_obj = Blog.query.filter_by(id=id).one()
+            blog_obj.is_active = False
+            db.session.add(blog_obj)
+            db.session.commit()
+            blog = Blog.query.all()           
+            admin_user = User.query.first()
+            message = "Blog Deactivated Successfully!"
+            return render_template('blog_list.html', all_employee=admin_user, blogs=blog, message=message)
+    if 'user_id' in session:
+        return redirect(url_for("blog_list"))
+    else:
+        return redirect(url_for('login'))
 
 #reset password
 @app.route('/password/reset',methods=['GET','POST'])
@@ -138,7 +185,7 @@ def edit_blog(id):
         blog = Blog.query.all()           
         admin_user = User.query.first()
         message = "Updated Successfully!"
-        return render_template('blog_list.html', all_employee=admin_user, blogs=blog, message=message)
+        return render_template('blog_list.html', all_employee=admin_user, blogs=blog, success_message=message)
     admin_user = User.query.first() 
     if 'user_id' in session:
         return render_template('blog_edit.html', all_employee=admin_user, blog=blog_obj )

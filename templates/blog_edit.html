@@ -20,43 +20,43 @@
 							
 							<div class="personelBodyprt">
 								<form action="/edit/blog/{{blog.id}}" method="POST">
-								<div class="topdeliveryprt">
-									<span>
-										<h3>Edit Blog</h3>
-										<!-- <p>
-											Invite agents to come register and start earning.
-										</p> -->
-									</span>
-									<!-- <button class="btn bluebtn" onclick="window.location.href = 'faq-terms.html';">
-										FAQS and Terms & Conditions
-										<i class="fa fa-angle-right"></i>
-									</button> -->
+									<div class="topdeliveryprt">
+										<span>
+											<h3>Edit Blog</h3>
+											<!-- <p>
+												Invite agents to come register and start earning.
+											</p> -->
+										</span>
+										<!-- <button class="btn bluebtn" onclick="window.location.href = 'faq-terms.html';">
+											FAQS and Terms & Conditions
+											<i class="fa fa-angle-right"></i>
+										</button> -->
 
-								</div>
-
-								<div class="row formprt delivery-agent margin30">
-									<div class="form_field">
-										<label>Title</label>
-										<input name='title' value={{blog.blog_title}} class="form-control" type="text" required>
 									</div>
+									<div class="addtropicprt margin50">
+										<div class="midformsec">
+											<div class="row">
+												<div class="form_field">
+													<label>Title</label>
+													<input name='title' value={{blog.blog_title}} class="form-control" type="text" required>
+												</div>
+												<br>
+
+												<div class="form_field full-width">
+													<label>Body</label>
+													<textarea name='desc' class="form-control"  required rows="8">{{blog.blog_description}}</textarea>
+												</div>
+												<div class="form_field">
+													<label>Image</label>
+													<input name='image' class="form-control" type="file"  class="form-control" rows="8" required>
+												</div>
+												
+											</div>
+											<button type="submit" class="bluebtn savebtn">Save</button>
+										</div>
+									</div>
+
 								
-								</div>
-								<div class="row formprt delivery-agent margin30">
-									<div class="form_field">
-										<label>Deacription</label>
-                                        <!-- {{blog.blog_description}} -->
-										<textarea name='desc'  class="form-control" type="text"  rows="5" cols="100" required>{{blog.blog_description}}</textarea>
-									</div>
-
-								</div>
-							</br>
-								<div class="form_field">
-									<label>&nbsp;</label>
-										<button class="btn orenge__btn" type="submit">
-											submit
-										</button>
-										
-								</div>
 							</form>
 
 								
