@@ -1,0 +1,178 @@
+{% extends 'base.html' %}
+{% block body %}
+
+<div class="body__panel">
+    <div class="container">
+        <div class="heading_wrap">
+            <dif align="middle">
+                <!-- <img src="/static/images/icon/cross.png" alt=""> -->
+                {% if message %}
+                        <h2 align="middle" style="color:red;"><b>{{message}}</b></h1>
+                {% endif %}
+                {% if success_message %}
+                        <h2 align="middle" style="color:green;"><b>{{success_message}}</b></h1>
+                {% endif %}
+            </dif>
+        </div>
+
+        <div class="panel margin30">
+            <div class="tabprt">
+                <div class="block__mb_short">
+                    <div class="resHeading">
+                        <h3>Blog Management</h3>
+                        <a class="mob_sidetogglebtn">
+                            <img src="images/icon/toogle.png" alt="">
+                        </a>
+                    </div>
+                </div>
+                <ul class="tabMenu shortmenu">
+                    <li>
+                        <a href="" class="active">Blogs</a>
+                    </li>
+                    
+                </ul>
+
+                <div class="personelBodyprt">
+                    <div class="topdeliveryprt">
+                        <span>
+                            <h3>Blog Management</h3>
+                            <p>
+                                Manage Blogs and change as you wish
+                            </p>
+                        </span>
+                        <a href="/add/blog/">
+                            <button class="btn bluebtn">
+                                Add Blog
+                            
+                            </button>
+                        </a>
+
+                    </div>
+                    <div class="datatable listing margin40">
+                        <div class="slcall">
+                            <input type="checkbox" />
+
+                            <!-- <label class="checkboxprt">
+                                Select all
+                            </label> -->
+                        </div>
+                        <table id="example-2" class="display" style="width:100%">
+                            <thead>
+                                <tr>
+                                    <th>&nbsp;</th>
+                                    <th>&nbsp;</th>
+                                    <th>&nbsp;</th>
+                                    <th>&nbsp;</th>
+                                    <th>&nbsp;</th>
+
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for blog in blogs%}
+                                <tr>
+                                    <td>
+                                        <!-- <div class="vehicle_select"> -->
+                                            <!-- <input type="checkbox" /> -->
+
+                                        <label class="checkboxprt">
+                                            <a href="#">
+                                                <span>{{blog.blog_title}}</span>
+                                            </a>
+                                        </label>
+
+                                        <!-- </div> -->
+                                    </td>
+
+                                    <td>
+                                        {{blog.blog_description[0:50]}}...
+                                    </td>
+                                    <td>
+                                        {{blog.date_created.date()}}
+                                    </td>
+                                    <td>
+                                        {% if blog.is_active%}
+                                            <button class="btn btnactive">Active</button>
+                                        {% else %}
+                                            <button class="btn btndeactive">Inactive</button>
+                                        {% endif %}
+                                    </td>
+                                    <td align="right">
+                                        <a href="/edit/blog/{{blog.id}}">
+                                            <i class="fa fa-pencil green"></i>
+                                        </a>
+                                        {% if blog.is_active%}
+                                            <a href="/deactivate/blog/{{blog.id}}">
+                                                <i class="fa fa-ban red"></i>
+                                            </a>
+                                        {% else %}
+                                            <a href="/activate/blog/{{blog.id}}">
+                                                <i class="fa fa-ban green"></i>
+                                            </a>
+                                        {% endif %}
+                                        <a href="/delete/blog/{{blog.id}}">
+                                            <i class="fa fa-trash-o red"></i>
+                                        </a>
+                                    </td>
+
+
+                                </tr>
+                                {% endfor %}
+
+
+
+
+
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- JS Plugins -->
+<script src="js/jquery.min.js" type="text/javascript"></script>
+
+<script src="js/jquery.mCustomScrollbar.concat.min.js"></script>
+
+<script src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
+<script>
+$('#example').DataTable({});
+$('#example-1').DataTable({});
+$('#example-2').DataTable({});
+$('#example-3').DataTable({});
+</script>
+
+<!-- custom js -->
+<script src="js/main.js" type="text/javascript"></script>
+
+
+
+
+
+
+
+
+	{% endblock body %}

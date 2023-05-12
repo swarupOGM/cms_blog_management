@@ -4,14 +4,14 @@
 			<div class="body__panel">
 				<div class="container">
 					<div class="heading_wrap">
-						<h2>Blog Management</h2>
+						<h2>Edit Blog</h2>
 					</div>
                     {% if blog %}
 					<div class="panel margin30">
 						<div class="tabprt">
 							<div class="block__mb_short">
 								<div class="resHeading">
-									<h3>Blog Management</h3>
+									<h3>Edit Blog</h3>
 									<a class="mob_sidetogglebtn">
 										<img src="/static/images/icon/toogle.png" alt="">
 									</a>
@@ -19,23 +19,16 @@
 							</div>
 							
 							<div class="personelBodyprt">
-								<form action="/edit/blog/{{blog.id}}" method="POST">
+								<form action="/edit/blog/{{blog.id}}" method="POST" enctype="multipart/form-data" >
 									<div class="topdeliveryprt">
-										<span>
+										<!-- <span>
 											<h3>Edit Blog</h3>
-											<!-- <p>
-												Invite agents to come register and start earning.
-											</p> -->
-										</span>
-										<!-- <button class="btn bluebtn" onclick="window.location.href = 'faq-terms.html';">
-											FAQS and Terms & Conditions
-											<i class="fa fa-angle-right"></i>
-										</button> -->
-
+										</span> -->
 									</div>
-									<div class="addtropicprt margin50">
+									<div class="addtropicprt margin90">
 										<div class="midformsec">
 											<div class="row">
+												
 												<div class="form_field">
 													<label>Title</label>
 													<input name='title' value={{blog.blog_title}} class="form-control" type="text" required>
@@ -50,7 +43,14 @@
 													<label>Image</label>
 													<input name='image' class="form-control" type="file"  class="form-control" rows="8" required>
 												</div>
+
 												
+											</div>
+											<div class="row">
+												<div class="form_field">
+													<small>
+														<img src="/static/uploads/{{ blog.image_name}}" alt="" class="img-fluid"  style="border:10px outset silver;" ></small>
+												</div>
 											</div>
 											<button type="submit" class="bluebtn savebtn">Save</button>
 										</div>

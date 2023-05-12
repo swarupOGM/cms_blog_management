@@ -9,6 +9,7 @@ import uuid
 from base64 import b64encode
 from werkzeug.utils import secure_filename
 import os
+from sqlalchemy import desc
 app = Flask(__name__)
 print()
 # app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://{}:{}@localhost/{}'.format(environ['DB_USER'],environ['DB_PASS'], environ['DB_DATABASE'])
@@ -70,13 +71,31 @@ class User(db.Model):
     def full_name(self):
         return self.first_name + ' ' + self.last_name 
 
+@app.route('/admin/home/',  methods=['GET'])
+def home():       
+    admin_user = User.query.first() 
+    if 'user_id' in session:
+        return render_template('home_page.html', all_employee=admin_user )
+    else:
+        return render_template('employee_login.html')
 
+@app.route('/blog/listing/', methods=['GET'])
+def blog_listing():
+    if request.method=='GET':
+        blog = Blog.query.order_by(desc(Blog.date_created)).all()           
+    admin_user = User.query.first() 
+    # all_role = role.query.all()
+    # print(all_role)
+    if 'user_id' in session:
+        return render_template('blog_listing_page.html', all_employee=admin_user, blogs=blog )
+    else:
+        return render_template('employee_login.html')
 
 @app.route('/growealth', methods=['GET'])
 def index_page():
     admin_user = User.query.first()
     created_by=admin_user.full_name()
-    blog = Blog.query.all()
+    blog = Blog.query.filter_by(is_active=True).all()
     return render_template('index.html', blogs=blog, created_by=created_by)
 
 
@@ -93,10 +112,10 @@ def activate_blog(id):
             blog_obj.is_active = True
             db.session.add(blog_obj)
             db.session.commit()
-            blog = Blog.query.all()           
+            blog = Blog.query.order_by(desc(Blog.date_created)).all()           
             admin_user = User.query.first()
             message = "Blog Activated Successfully!"
-            return render_template('blog_list.html', all_employee=admin_user, blogs=blog, success_message=message)
+            return render_template('blog_listing_page.html', all_employee=admin_user, blogs=blog, success_message=message)
     if 'user_id' in session:
         return redirect(url_for("blog_list"))
     else:
@@ -115,10 +134,10 @@ def deactivate_blog(id):
             blog_obj.is_active = False
             db.session.add(blog_obj)
             db.session.commit()
-            blog = Blog.query.all()           
+            blog = Blog.query.order_by(desc(Blog.date_created)).all()           
             admin_user = User.query.first()
             message = "Blog Deactivated Successfully!"
-            return render_template('blog_list.html', all_employee=admin_user, blogs=blog, message=message)
+            return render_template('blog_listing_page.html', all_employee=admin_user, blogs=blog, message=message)
     if 'user_id' in session:
         return redirect(url_for("blog_list"))
     else:
@@ -162,14 +181,15 @@ def deleteblog(id):
             blog_obj = Blog.query.filter_by(id=id).one()
             db.session.delete(blog_obj)
             db.session.commit()
-            blog = Blog.query.all()           
+            blog = Blog.query.order_by(desc(Blog.date_created)).all()           
             admin_user = User.query.first()
             message = "Deleted Successfully!"
-            return render_template('blog_list.html', all_employee=admin_user, blogs=blog, message=message)
+            return render_template('blog_listing_page.html', all_employee=admin_user, blogs=blog, message=message)
     if 'user_id' in session:
-        return redirect(url_for("blog_list"))
+        return redirect(url_for("blog_listing"))
     else:
         return redirect(url_for('login'))
+
 #edit blog
 @app.route('/edit/blog/<id>', methods=['GET', 'POST'])
 def edit_blog(id):
@@ -177,15 +197,25 @@ def edit_blog(id):
         print("under the id")
         blog_obj = Blog.query.filter_by(id=id).first()
     elif request.method == 'POST':
+        print("under the else")
         blog_obj = Blog.query.filter_by(id=id).first()
         blog_obj.blog_title = request.form.get('title')
         blog_obj.blog_description = request.form.get('desc')
+        image = request.files.get('image')
+        print(image)
+        blog_obj.image = image.read()
+        blog_obj.image_name = image.filename
         db.session.add(blog_obj)
         db.session.commit()
-        blog = Blog.query.all()           
+        #image save
+        image.seek(0)
+        path = os.path.join(app.config['UPLOAD_FOLDER'], secure_filename(image.filename))
+        image.save(path)
+        
+        blog = Blog.query.order_by(desc(Blog.date_created)).all()           
         admin_user = User.query.first()
         message = "Updated Successfully!"
-        return render_template('blog_list.html', all_employee=admin_user, blogs=blog, success_message=message)
+        return render_template('blog_listing_page.html', all_employee=admin_user, blogs=blog, success_message=message)
     admin_user = User.query.first() 
     if 'user_id' in session:
         return render_template('blog_edit.html', all_employee=admin_user, blog=blog_obj )
@@ -205,10 +235,12 @@ def add_blog():
                     image_name=image.filename, image=image.read())        
         db.session.add(blog)
         db.session.commit()   
-    admin_user = User.query.first() 
-    # all_role = role.query.all()
-    # print(all_role)
+        return redirect(url_for('blog_listing'))
+    elif request.method=='GET':
+        admin_user = User.query.first() 
+        return render_template('personnel.html', all_employee=admin_user )
     if 'user_id' in session:
+        admin_user = User.query.first() 
         return render_template('personnel.html', all_employee=admin_user )
     else:
         return render_template('employee_login.html')
@@ -292,7 +324,7 @@ def login():
             print(check_password_hash(user.password, password))
             if user.is_admin:
                 session['user_id'] = user.id
-                return redirect(url_for('register_employee',  user=user.is_admin))
+                return redirect(url_for('home',  user=user.is_admin))
             elif user and check_password_hash(user.password, password):
                 session['user_id'] = user.id
                 print("in if")
