@@ -22,34 +22,34 @@
         
                                 {% endif %}
                             </dif>
-							<form action="/edit/profile/" method="POST">
+							<form action="/edit/profile/" method="POST" enctype="multipart/form-data" >
         
-							{% if all_eemployee %}
+							{% if all_employee %}
 							<div class="box_mid">
 								<div class="row">
 									<div class="form_field">
 										<label>First Name</label>
-										<input name ='first_name' value={{all_eemployee.first_name}} class="form-control" type="text" required>
+										<input name ='first_name' value={{all_employee.first_name}} class="form-control" type="text" required>
 									</div>
 									<div class="form_field">
 										<label>Last Name</label>
-										<input name='last_name' value={{all_eemployee.last_name}} class="form-control" type="text" required>
+										<input name='last_name' value={{all_employee.last_name}} class="form-control" type="text" required>
 									</div>
 									<div class="form_field full-width">
 										<label>Email Address</label>
-										<input name='email' value={{all_eemployee.email}} class="form-control" type="text" required>
+										<input name='email' value={{all_employee.email}} class="form-control" type="text" required>
 									</div>
 									<div class="form_field full-width">
 										<label>UserName</label>
-										<input name='username' value={{all_eemployee.username}} class="form-control" type="text" required>
+										<input name='username' value={{all_employee.username}} class="form-control" type="text" required>
 									</div>
 									<div class="form_field full-width">
 										<label>Contact No</label>
-										<input name='phone' value={{all_eemployee.contact_no}} class="form-control" type="text" required>
+										<input name='phone' value={{all_employee.contact_no}} class="form-control" type="text" required>
 									</div>
 									<div class="form_field full-width">
 										<label>Profile Image</label>
-										<input name='profile_photo' class="form-control" type="file" required>
+										<input name='profile_photo'  value="{{all_employee.profile_image_name}}" class="form-control" type="file" required>
 									</div>
 									
 								</div>

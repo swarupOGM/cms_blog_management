@@ -8,7 +8,7 @@ from os import environ
 import uuid
 from base64 import b64encode
 from werkzeug.utils import secure_filename
-
+import os
 app = Flask(__name__)
 print()
 # app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://{}:{}@localhost/{}'.format(environ['DB_USER'],environ['DB_PASS'], environ['DB_DATABASE'])
@@ -151,9 +151,11 @@ def add_blog():
         title = request.form.get('title')
         desc = request.form.get('desc')
         image = request.files.get('image')
-        print(title, desc, bytearray(image))
-        files = request.file.getlist('files[]')
-        blog = Blog(blog_title=title, blog_description=desc, created_by=session['user_id'], date_created=datetime.now(), data=image)        
+        #image save
+        path = os.path.join(app.config['UPLOAD_FOLDER'], secure_filename(image.filename))
+        image.save(path)
+        blog = Blog(blog_title=title, blog_description=desc, created_by=session['user_id'], date_created=datetime.now(),
+                    image_name=image.filename, image=image.read())        
         db.session.add(blog)
         db.session.commit()   
     admin_user = User.query.first() 
@@ -195,7 +197,7 @@ def register_employee():
         user.profile_image = profile_image.read()
         user.profile_image_name = profile_image.filename
         #image save
-        import os
+        profile_image.seek(0)
         path = os.path.join(app.config['UPLOAD_FOLDER'], secure_filename(profile_image.filename))
         profile_image.save(path)
         # user.profile_image = photo

@@ -19,7 +19,7 @@
 							</div>
 							
 							<div class="personelBodyprt">
-								<form action="/add/blog/" method="POST">
+								<form action="/add/blog/" method="POST" enctype="multipart/form-data">
 								<div class="topdeliveryprt">
 									<span>
 										<h3>Add Blog</h3>
@@ -47,6 +47,13 @@
 										<textarea name='desc' class="form-control" type="text" required></textarea>
 									</div>
 
+								</div>
+								<div class="row formprt delivery-agent margin30">
+									<div class="form_field">
+										<label>Image</label>
+										<input name='image' class="form-control" type="file"   required>
+									</div>
+								
 								</div>
 							</br>
 								<div class="form_field">

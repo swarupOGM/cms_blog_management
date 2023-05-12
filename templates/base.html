@@ -5,8 +5,8 @@
 	<meta charset="UTF-8">
 	<meta content="IE=edge" http-equiv="X-UA-Compatible">
 	<meta content="width=device-width, initial-scale=1" name="viewport">
-	<title>Snappie</title>
-	<link rel="shortcut icon" type="image/x-icon" href="/static/images/favicon.png">
+	<title>Cms Blog</title>
+	<!-- <link rel="shortcut icon" type="image/x-icon" href="/static/images/favicon.png"> -->
 
 
 
@@ -177,8 +177,9 @@
 							</div>
 							<div class="profile__dropdown hidden__mb">
 								<a href="#">
-									<img src="/static/images/no-userimg.png" alt="">
-									{{all_eemployee.username}}
+									<img src="/static/uploads/{{ all_employee.profile_image_name | default('no-userimg.png')}}" alt="">
+									<!-- <img src="/static/uploads/no-userimg.png" alt=""> -->
+									{{all_employee.username}}
 								</a>
 								<div class="dropdown-submenu listingMenu">
 									<ul>
@@ -186,11 +187,11 @@
 
 											<div class="padtop flex">
 												<a href="profile.html">
-													<img src="/static/images/no-userimg.png" alt="">
+													<img src="/static/uploads/{{ all_employee.profile_image_name | default('no-userimg.png')}}" alt="">
 												</a>
 												<div class="userdetail">
-													<h3>{{all_eemployee.username}}</h3>
-													<small>{{all_eemployee.email}}</small>
+													<h3>{{all_employee.username}}</h3>
+													<small>{{all_employee.email}}</small>
 													<button onclick="window.location.href = '/edit/profile/';">Edit
 														Profile</button>
 												</div>
