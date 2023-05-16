@@ -1,5 +1,36 @@
 {% extends 'base.html' %}
 {% block body %}
+<style>
+    img {
+      border-radius: 50%;
+    }
+   
+    a {
+    text-decoration: none;
+    display: inline-block;
+    padding: 5px 10px;
+    }
+
+    a:hover {
+    background-color: #ddd;
+    color: black;
+    }
+
+    .previous {
+    background-color: #5a58c4;
+    color: black;
+    }
+
+    .next {
+    background-color: #127cc4;
+    color: white;
+    }
+
+    .round {
+    border-radius: 20%;
+    }
+
+</style>
 
 <div class="body__panel">
     <div class="container">
@@ -7,10 +38,10 @@
             <dif align="middle">
                 <!-- <img src="/static/images/icon/cross.png" alt=""> -->
                 {% if message %}
-                        <h2 align="middle" style="color:red;"><b>{{message}}</b></h1>
+                    <h2 align="middle" style="color:red;"><b>{{message}}</b></h1>
                 {% endif %}
                 {% if success_message %}
-                        <h2 align="middle" style="color:green;"><b>{{success_message}}</b></h1>
+                    <h2 align="middle" style="color:green;"><b>{{success_message}}</b></h1>
                 {% endif %}
             </dif>
         </div>
@@ -50,11 +81,16 @@
                     </div>
                     <div class="datatable listing margin40">
                         <div class="slcall">
-                            <input type="checkbox" />
+                            <!-- <input type="checkbox" /> -->
+                            {% if blogs.has_prev %}
+                                <a href="{{ url_for('blog_listing', page=blogs.prev_num, per_page=blogs.per_page) }}" class="previous round">&#8249;</a>
+                                <!-- <a href="{{ url_for('blog_listing', page=blogs.prev_num, per_page=blogs.per_page) }}">Previous</a> -->
+                            {% endif %}
 
-                            <!-- <label class="checkboxprt">
-                                Select all
-                            </label> -->
+                            {% if blogs.has_next %}
+                                <a href="{{ url_for('blog_listing', page=blogs.next_num, per_page=blogs.per_page) }}" class="next round">&#8250;</a>
+                                <!-- <a href="{{ url_for('blog_listing', page=blogs.next_num, per_page=blogs.per_page) }}">Next</a> -->
+                            {% endif %}
                         </div>
                         <table id="example-2" class="display" style="width:100%">
                             <thead>
@@ -68,7 +104,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                {% for blog in blogs%}
+                                {% for blog in blogs.items %}
                                 <tr>
                                     <td>
                                         <!-- <div class="vehicle_select"> -->
@@ -81,6 +117,9 @@
                                         </label>
 
                                         <!-- </div> -->
+                                    </td>
+                                    <td>
+                                        <img src="/static/uploads/{{ blog.image_name}}" alt="Avatar" style="width:50px">
                                     </td>
 
                                     <td>
@@ -113,17 +152,13 @@
                                             <i class="fa fa-trash-o red"></i>
                                         </a>
                                     </td>
+                               
 
 
                                 </tr>
+                                    
                                 {% endfor %}
-
-
-
-
-
-
-                            </tbody>
+                    
                         </table>
                     </div>
                 </div>
