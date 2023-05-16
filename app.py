@@ -3,7 +3,6 @@ from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_migrate import Migrate, history
-import requests
 from os import environ
 import uuid
 from base64 import b64encode
@@ -30,7 +29,7 @@ def generate_uuid():
 class Blog(db.Model):
     id = db.Column(db.String(100), primary_key=True, default=generate_uuid)
     blog_title = db.Column(db.String(100), unique=True, nullable=False)
-    blog_description = db.Column(db.String(500), nullable=False)
+    blog_description = db.Column(db.Text, nullable=False)
     created_by = db.Column(db.String(100), db.ForeignKey('user.id'), nullable=False)
     date_created = db.Column(db.DateTime, default=datetime.utcnow)
     is_active = db.Column(db.Boolean, default=True)
@@ -71,6 +70,16 @@ class User(db.Model):
     def full_name(self):
         return self.first_name + ' ' + self.last_name 
 
+class Post(db.Model):
+    id = db.Column(db.String(100), primary_key=True, default=generate_uuid)
+    title = db.Column(db.String(100), nullable=False)
+    body = db.Column(db.Text, nullable=False)
+    slug = db.Column(db.String(100), unique=True, nullable=False)
+    published = db.Column(db.Boolean, default=False)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    updated_at = db.Column(db.DateTime, onupdate=datetime.utcnow)
+
+
 @app.route('/admin/home/',  methods=['GET'])
 def home():       
     admin_user = User.query.first() 
@@ -82,7 +91,9 @@ def home():
 @app.route('/blog/listing/', methods=['GET'])
 def blog_listing():
     if request.method=='GET':
-        blog = Blog.query.order_by(desc(Blog.date_created)).all()           
+        page = request.args.get('page', 1, type=int)
+        per_page = request.args.get('per_page', 2, type=int)
+        blog = Blog.query.order_by(desc(Blog.date_created)).paginate(page=page, per_page=per_page)           
     admin_user = User.query.first() 
     # all_role = role.query.all()
     # print(all_role)
@@ -112,7 +123,9 @@ def activate_blog(id):
             blog_obj.is_active = True
             db.session.add(blog_obj)
             db.session.commit()
-            blog = Blog.query.order_by(desc(Blog.date_created)).all()           
+            page = request.args.get('page', 1, type=int)
+            per_page = request.args.get('per_page', 2, type=int)
+            blog = Blog.query.order_by(desc(Blog.date_created)).paginate(page=page, per_page=per_page)           
             admin_user = User.query.first()
             message = "Blog Activated Successfully!"
             return render_template('blog_listing_page.html', all_employee=admin_user, blogs=blog, success_message=message)
@@ -134,7 +147,9 @@ def deactivate_blog(id):
             blog_obj.is_active = False
             db.session.add(blog_obj)
             db.session.commit()
-            blog = Blog.query.order_by(desc(Blog.date_created)).all()           
+            page = request.args.get('page', 1, type=int)
+            per_page = request.args.get('per_page', 2, type=int)
+            blog = Blog.query.order_by(desc(Blog.date_created)).paginate(page=page, per_page=per_page)           
             admin_user = User.query.first()
             message = "Blog Deactivated Successfully!"
             return render_template('blog_listing_page.html', all_employee=admin_user, blogs=blog, message=message)
@@ -181,7 +196,9 @@ def deleteblog(id):
             blog_obj = Blog.query.filter_by(id=id).one()
             db.session.delete(blog_obj)
             db.session.commit()
-            blog = Blog.query.order_by(desc(Blog.date_created)).all()           
+            page = request.args.get('page', 1, type=int)
+            per_page = request.args.get('per_page', 2, type=int)
+            blog = Blog.query.order_by(desc(Blog.date_created)).paginate(page=page, per_page=per_page)           
             admin_user = User.query.first()
             message = "Deleted Successfully!"
             return render_template('blog_listing_page.html', all_employee=admin_user, blogs=blog, message=message)
@@ -212,7 +229,9 @@ def edit_blog(id):
         path = os.path.join(app.config['UPLOAD_FOLDER'], secure_filename(image.filename))
         image.save(path)
         
-        blog = Blog.query.order_by(desc(Blog.date_created)).all()           
+        page = request.args.get('page', 1, type=int)
+        per_page = request.args.get('per_page', 2, type=int)
+        blog = Blog.query.order_by(desc(Blog.date_created)).paginate(page=page, per_page=per_page)           
         admin_user = User.query.first()
         message = "Updated Successfully!"
         return render_template('blog_listing_page.html', all_employee=admin_user, blogs=blog, success_message=message)
