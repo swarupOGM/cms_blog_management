@@ -10,8 +10,8 @@
  3.flask db upgrade`
  
 ## To create Super user-->>
-` flask shell
- from app import db, User
- u = User(username="", password="", is_admin=True)
- db.session.add(u)
- db.session.commit()`
+`flask shell
+ >>from app import db, User
+ >>u = User(username="", password="", is_admin=True)
+ >>db.session.add(u)
+ >>db.session.commit()`
